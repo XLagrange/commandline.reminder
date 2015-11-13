@@ -3,6 +3,7 @@ import sys
 from thread import *
 import time
 from pync import Notifier
+import operator
 
 
 class Event:
@@ -21,7 +22,7 @@ events = []
 # function to actually deliver notification to osx
 def check_and_notify():
     while True:
-
+        time.sleep(30)
         if len(events) == 0:
             continue
 
@@ -68,6 +69,7 @@ def accept_event(conn):
                 time_in_future += int(token) * convert_to_seconds(unit)
         # print('created an event %s in %s seconds' % (message, str(time_in_future)))
         events.append(Event(time_in_future, message))
+        events.sort(key=operator.attrgetter('time'))
     # print out all queued reminders
     elif operation == 'list':
         for event in events:
